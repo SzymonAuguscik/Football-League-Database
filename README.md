@@ -1,4 +1,4 @@
-# Football-League-Database
+# Football League Database
 ## PostgreSQL database of fictitious players and clubs with GUI made in Java
 ### Introduction
 Combining my two passions of football and computer science, I've decided to create an app - a database with graphical interface. I have invented 16 names of clubs from various European capital cities and almost 400 players with "quasi-typical" for their countries fore- and surnames. My goal is to prepare SQL file that sets database containing those clubs and players and write program that will let users visualise the data.

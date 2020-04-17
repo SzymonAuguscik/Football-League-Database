@@ -1,22 +1,6 @@
 from random import randint, shuffle
 
 
-def setPlayers():
-    arr1 = [1 for i in range(20)] + [12 for i in range(3)] + [31 for i in range(1)]
-
-    arr2 = [2 for i in range(19)] + [4 for i in range(17)] + [19 for i in range(19)] + [6 for i in range(18)] + \
-                [20 for i in range(17)] + [21 for i in range(5)] + [23 for i in range(6)] + [25 for i in range(3)] + \
-                [45 for i in range(3)]
-
-    arr3 = [7 for i in range(19)] + [10 for i in range(21)] + [11 for i in range(18)] + [22 for i in range(18)] + \
-                  [29 for i in range(12)] + [24 for i in range(11)] + [27 for i in range(10)] + [77 for i in range(5)] + \
-                  [77 for i in range(3)]
-
-    arr4 = [9 for i in range(20)] + [17 for i in range(12)] + [37 for i in range(10)] + [93 for i in range(3)]
-
-    return arr1, arr2, arr3, arr4
-
-
 def main():
     gamesID = [1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97, 105, 113, 121, 129, 137, 145, 153, 161, 169, 177, 185,
                193, 201, 209, 217, 225, 233]
@@ -31,56 +15,16 @@ def main():
 
     for i in range(len(gamesID)):
         punished = randint(0, 8)
-        cardList = []
-        for t in range(punished):
-            cardList.append(cards[randint(0, len(cards)-1)])
+        count = randint(11, 14)
         clean = "FALSE"
         if len(cleanSheet) != 0 and i+1 == cleanSheet[0]:
             clean = "TRUE"
             cleanSheet.pop(0)
-        count = randint(11, 14)
-        goals = []
-        assists = []
-        for t in range(count-1):
-            multigoal = []
-            multi = 1
-            for z in reversed(range(goalCount[i])):
-                for y in range(multi):
-                    multigoal.append(z+1)
-                multi += 10
-            tmp = 0
-            if len(multigoal):
-                tmp = multigoal[randint(0, len(multigoal)-1)]
-            if goalCount[i]:
-                goals.append(tmp)
-            else:
-                goals.append(0)
-            goalCount[i] -= tmp
-            if goalCount[i] < 0:
-                goalCount[i] = 0
-        shuffle(goals)
-        for t in range(count-1):
-            multigoal = []
-            multi = 1
-            for z in reversed(range(assistCount[i])):
-                for y in range(multi):
-                    multigoal.append(z+1)
-                multi += 10
-            tmp = 0
-            if len(multigoal):
-                tmp = multigoal[randint(0, len(multigoal)-1)]
-            if assistCount[i]:
-                assists.append(tmp)
-            else:
-                assists.append(0)
-            assistCount[i] -= tmp
-            if assistCount[i] < 0:
-                assistCount[i] = 0
-        shuffle(assists)
 
-        for t in range(len(cardList), count):
-            cardList.append("NULL")
-        shuffle(cardList)
+        goals = makeEventArray(count, goalCount, i)
+        assists = makeEventArray(count, assistCount, i)
+        cardList = initializeCards(count, punished, cards)
+
         file.write("--" + str(i+1) + ". match--\n")
         for j in range(count):
             if j == 0:
@@ -118,9 +62,60 @@ def main():
     file.close()
 
 
+def setPlayers():
+    arr1 = [1 for i in range(20)] + [12 for i in range(3)] + [31 for i in range(1)]
+
+    arr2 = [2 for i in range(19)] + [4 for i in range(17)] + [19 for i in range(19)] + [6 for i in range(18)] + \
+                [20 for i in range(17)] + [21 for i in range(5)] + [23 for i in range(6)] + [25 for i in range(3)] + \
+                [45 for i in range(3)]
+
+    arr3 = [7 for i in range(19)] + [10 for i in range(21)] + [11 for i in range(18)] + [22 for i in range(18)] + \
+                  [29 for i in range(12)] + [24 for i in range(11)] + [27 for i in range(10)] + [77 for i in range(5)] + \
+                  [77 for i in range(3)]
+
+    arr4 = [9 for i in range(20)] + [17 for i in range(12)] + [37 for i in range(10)] + [93 for i in range(3)]
+
+    return arr1, arr2, arr3, arr4
+
+
+def initializeCards(count, punished, cards):
+    cardList = []
+    for t in range(punished):
+        cardList.append(cards[randint(0, len(cards)-1)])
+
+    for t in range(len(cardList), count):
+        cardList.append("NULL")
+    shuffle(cardList)
+
+    return cardList
+
+
 def randomize(array):
     s = array[randint(0, len(array)-1)]
     return s, [value for value in array if value != s]
+
+
+def makeEventArray(count, eventCount, index):
+    events = []
+    for t in range(count - 1):
+        multigoal = []
+        multi = 1
+        for z in reversed(range(eventCount[index])):
+            for y in range(multi):
+                multigoal.append(z + 1)
+            multi += 10
+        tmp = 0
+        if len(multigoal):
+            tmp = multigoal[randint(0, len(multigoal) - 1)]
+        if eventCount[index]:
+            events.append(tmp)
+        else:
+            events.append(0)
+        eventCount[index] -= tmp
+        if eventCount[index] < 0:
+            eventCount[index] = 0
+    shuffle(events)
+    return events
 
 
 if __name__ == "__main__":
